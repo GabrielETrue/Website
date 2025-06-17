@@ -6,6 +6,8 @@ Contact Email: gabrieltrue2004@gmail.com
 
 LinkedIn: https://www.linkedin.com/in/gabrieltrue/
 
+Website: https://gabrieltrue.com
+
 # Purpose
 
 The purpose of this repo is to house my personal website. Establishing this repo provides the following benefits:
