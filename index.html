@@ -7,8 +7,8 @@
         <link rel="icon" href="/favicon.png" />
         <link rel="stylesheet" href="styles/main.css" />
         <script src="scripts/main.js" defer></script>
-        <meta name="description" content="Gabriel True's personal portfolio, featuring projects, blog posts, and more.">
-        <meta name="keywords" content="Gabriel True, portfolio, software, projects, data science, personal website">
+        <meta name="description" content="Gabriel (Gabe) True's personal portfolio, featuring projects, blog posts, and more.">
+        <meta name="keywords" content="Gabriel True, Gabe True, portfolio, software, projects, data science, personal website">
         <meta name="author" content="Gabriel True">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,6 +30,7 @@
 
         <div class='main-content'>
             <section class="bio">
+                <img src="assets/HalloweenShot.jpg" alt="headshot" width="200">
                 <h1>Quick Bio</h1>
                 <p>
                     I'm <b>Gabriel True</b>. I was born in Germany, spent almost a decade in California, grew up in Kentucky, and studied in Chicago. 
@@ -74,26 +75,34 @@
                     Coincidentally, all three classes were either graduate classes or classes dual-listed as both undergraduate and graduate level.
                 </p>
                 <section class = 'classes'>
-                    <h3>Honors Combinatorics</h3>
-                    <p>The most difficult class I encountered during my time at the University of Chicago. Taught by <a href="https://en.wikipedia.org/wiki/L%C3%A1szl%C3%B3_Babai">László Babai</a>,
-                    I certainly learned the value of time management in this class. What fascinated me so much about this class was the way we would learn
-                    a specific sub-field of math in detail in order to logically deduce and prove fundamental discoveries prevalent in statistics and probability theory.</p>
-                    <h3>Machine Learning and Large Scale Data Analysis</h3>
-                    <p> After taking several classes in machine learning, this was the culmination of all I had learned. Mathematically rigorous and practicial, 
-                        we spent half the time mathematically proving the fundamental equations behind essential (and more esoteric) models within machine learning, and 
-                        the other half coding practical models to apply theory such as sentiment analysis, classification, and diffusion models.
-                    </p>
-                    <h3>Scientific Visualization</h3>
-                    <p> Taught by <a href="https://en.wikipedia.org/wiki/Gordon_Kindlmann">Gordon Kindlmann</a>, this class was the perfect marriage of coding and mathematics. We implemented various linear algebra and vector calculus techniques such as 
-                        convolution and tensor operations in C to create projects such as a volume renderer and isocontour mapper. Programming in C, we had the opportunity to leverage
-                        parallel computer and optimization of memory.
-                    </p>
-                    <h3>Causal Inference</h3>
-                    <p>
-                        In my previous statistics classes, I was warned about the dangers of making causal claims from metrics obtained through statistical 
-                        analysis. This class provided me the opportunity to finally make these claims and understand the underlying assumptions necessary to 
-                        perform Causal Analyses.
-                    </p>
+                    <div class = 'combinatorics'>
+                        <h3>Honors Combinatorics</h3>
+                        <p>The most difficult class I encountered during my time at the University of Chicago. Taught by <a href="https://en.wikipedia.org/wiki/L%C3%A1szl%C3%B3_Babai">László Babai</a>,
+                        I certainly learned the value of time management in this class. What fascinated me so much about this class was the way we would learn
+                        a specific sub-field of math in detail in order to logically deduce and prove fundamental discoveries prevalent in statistics and probability theory.</p>
+                    </div>
+                    <div class = 'lsda'>
+                        <h3>Machine Learning and Large Scale Data Analysis</h3>
+                        <p> After taking several classes in machine learning, this was the culmination of all I had learned. Mathematically rigorous and practicial, 
+                            we spent half the time mathematically proving the fundamental equations behind essential (and more esoteric) models within machine learning, and 
+                            the other half coding practical models to apply theory such as sentiment analysis, classification, and diffusion models.
+                        </p>
+                    </div>
+                    <div class = 'scivis'>
+                        <h3>Scientific Visualization</h3>
+                        <p> Taught by <a href="https://en.wikipedia.org/wiki/Gordon_Kindlmann">Gordon Kindlmann</a>, this class was the perfect marriage of coding and mathematics. We implemented various linear algebra and vector calculus techniques such as 
+                            convolution and tensor operations in C to create projects such as a volume renderer and isocontour mapper. Programming in C, we had the opportunity to leverage
+                            parallel computer and optimization of memory.
+                        </p>
+                    </div>
+                    <div class = 'causal'>
+                        <h3>Causal Inference</h3>
+                        <p>
+                            In my previous statistics classes, I was warned about the dangers of making causal claims from metrics obtained through statistical 
+                            analysis. This class provided me the opportunity to finally make these claims and understand the underlying assumptions necessary to 
+                            perform Causal Analyses.
+                        </p>
+                    </div>
                 </section>
             </section>
             <section class = 'experience'>
@@ -101,45 +110,66 @@
                 <p> My trajectory has not been linear and this has provided me an enriching wealth of experiences which
                     have contributed to what I bring to a job.
                 </p>
+                <div class = 'aimpoint'>
+                    <h2>Current Employment: Associate Data Scientist | Aimpoint Digital</h2>
+                    <p>
+                        Aimpoint Digital is a <b>Data and AI</b> consulting firm. I am currently employed as an Associate Data Scientist
+                        going through the New Consultant Development Program (NCDP).
+                    </p>
+                </div>
+                <div class = 'careervillage'>
+                    <h2>Data Analyst | CareerVillage</h2>
+                    <p>
+                        Working at CareerVillage helped provide me the tools that I use to this day in the field of data science. Through PostgreSQL
+                        and BigQuery queries, I was able to help integrate data into dashboards for both technical and nontechnical teams. Using hundreds of 
+                        thousands of LLM logs, I performed sentiment analysis on the chats. Using these findings and a variety of statistical analyses, I sought
+                        to identify age-related bias in chats. Furthermore, I helped to refactor a OpenAI summarization program. In doing so, I developed
+                        a recursive summarization pipeline.
+                    </p>
+                </div>
+                <div class = 'alphaocean'>
+                    <h2>Quantitative Developer Intern | AlphaOcean</h2>
+                    <p>
+                        At AlphaOcean, I had the opportunity to implement a variety of programmed deliverables. Using monaco library in Python and data such
+                        as oil spot & future prices and maritime searoutes, I helped to develope a monte carlo simulation to advise ships on optimal fueling
+                        routes based on fuel pricing. Furthermore, due to fuel commingling constraints, we had enough information to implement a linear
+                        programming algorithm (Through the PuLp library) which informed ships of their prior fueling allocations if they had lost
+                        track of which tank they fueled.
+                    </p>
+                </div>
 
-                <h2>Current Employment: Associate Data Scientist | Aimpoint Digital</h2>
-                <p>
-                    Aimpoint Digital is a <b>Data and AI</b> consulting firm. I am currently employed as an Associate Data Scientist
-                    going through the New Consultant Development Program (NCDP).
-                </p>
+                <div class = 'shepherd'>
+                    <h2>Quantitative Analyst Intern | Shepherd Ventures</h2>
+                    <p>
+                        At Shepherd Ventures, I was placed on the "AI Injection Team". Essentially, this meant that my specific job was to help integrate
+                        machine learning capabilities within the investing scheme. With the team, I helped combine the Davies-Bouldin Index with a modified Kmean Clustering
+                        algorithm to establish an asset preselection algorithm. From there, I used and helped integrate a variety of techniques to help forecast volatility
+                        and optimize portfolio weighting. Forecasting techniques included ARMA, GARCH, and EGARCH models on public, historic financial data. Furthermore, 
+                        we utilized mean-variance optimization to ascertain the optimal weighting of assets.
+                    </p>
+                </div>
 
-                <h2>Data Analyst | CareerVillage</h2>
-                <p>
-                    As a data analyst, I had a fairly broad exposure to the world that I am pursuing further in the field of data science.
-                    
-                </p>
-
-                <h2>Quantitative Developer Intern | AlphaOcean</h2>
-                <p>
-                    At AlphaOcean, I got a crash course in the world of quantitative research and trading tools. I worked on optimization algorithms
-                    to improve the efficiency of portfolio backtesting and implemented Monte Carlo simulations for risk modeling. It was a great 
-                    intro to financial data and the speed and precision needed to work with it — and it pushed me to think more carefully about performance
-                    and complexity, especially when deploying models across different client environments.
-                </p>
-
-                <h2>Quantitative Analyst Intern | Shepherd Ventures</h2>
-                <p>
-                    My work here focused on building predictive models for financial time series. I trained and evaluated a range of volatility models,
-                    including GARCH and EGARCH, and used PCA to reduce dimensionality in multi-asset portfolios. I also helped the team run scenario-based
-                    stress tests on investment strategies. This internship was the point where my interest in statistical modeling really clicked with
-                    the financial world.
-                </p>
-
-                <h2>Student Technological Assistant | University of Chicago Department of Physics</h2>
-                <p>
-                    I worked part-time here during college, supporting the department’s web tools and internal data tracking systems. It wasn’t glamorous work,
-                    but it helped me get comfortable with a lot of the operational side of coding — debugging old scripts, dealing with mismatched data formats,
-                    optimizing Excel processes, and helping staff interpret their usage dashboards. More than anything, it taught me how to make things that just work.
-                </p>
-                <h2> Strategic Partnerships Intern | TechSoup Global </h2>
-                <p>
-
-                </p>
+                <div class = 'physics'>
+                    <h2>Student Technological Assistant | University of Chicago Department of Physics</h2>
+                    <p>
+                        I worked part-time here during college for around a year. One of my primary jobs was helping run, modify, and create pages on
+                        the physics department's website. Doing this oftentimes required open communication and compromise. For example, some individual researchers
+                        may request a more personalized profile on the website while protocol would require a particular template. Communicating with the department 
+                        heads and these researchers helped reach a compromise. Other than that, I was tasked with gathering, analyzing, and presenting data pertaining to both the website and other
+                        events held by the physics department.
+                    </p>
+                </div>
+                <div class = 'techsoup'>
+                    <h2> Strategic Partnerships Intern | TechSoup Global </h2>
+                    <p>
+                        While not as technically advanced as the other positions, this was a great beginning to the world of business. As a
+                        strategic partnerships intern, a lot of my work revolved around researching best practices and tips that TechSoup partnered
+                        with. In particular, I researched CSR & ESG trends in companies partnered with TechSoup to understand how to coordinate with the missions
+                        of such companies. When collecting internal data, I was offered the chance to use <b>PowerBI</b>. I was granted the opportunity to interview
+                        some of TechSoup's corporate partner representatives, and I presented the findings of my research to the company -- including executives.
+                        This was a great opportunity to develop some of the soft skills that I use to this day.
+                    </p>
+                </div>
             </section>
             <section class = 'resume'>
                 <h1> Resume </h1>
@@ -148,7 +178,7 @@
             </section>
             <section class = 'contact-me'>
                 <h1>Contact Me</h1>
-                <p>For any questions or discussions, please feel free to contact me through any of the following means:</p>
+                <p>To contact me, please feel free to contact me through any of the following means:</p>
             </section>
         </div>
 
