@@ -157,3 +157,18 @@ section a:hover {
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(255, 0, 150, 0.3);
 }
+
+.particle {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background: #00e5ff;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 10s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-200vh); }
+}
