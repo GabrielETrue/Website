@@ -1,0 +1,1914 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piece by Piece ♥</title>
+    <link rel="icon" href="/favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0d0018;
+        --surface: rgba(255, 200, 220, 0.07);
+        --surface2: #1a0028;
+        --border: rgba(232, 132, 154, 0.3);
+        --rose: #e8849a;
+        --blush: #ffb6c1;
+        --deep: #c41e5a;
+        --gold: #f0c060;
+        --text: #fff0f3;
+        --muted: rgba(255, 240, 243, 0.55);
+        --green: #5cb85c;
+        --yellow: #e8c840;
+        --wall: #e8849a;
+      }
+      body {
+        font-family: 'Lato', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: 'Playfair Display', serif;
+      }
+
+      /* HEARTS BG */
+      .hearts-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+      .hp {
+        position: absolute;
+        bottom: -60px;
+        opacity: 0;
+        animation: fheart linear infinite;
+      }
+      @keyframes fheart {
+        0% {
+          bottom: -60px;
+          opacity: 0;
+          transform: translateX(0) scale(1);
+        }
+        10% {
+          opacity: 0.7;
+        }
+        50% {
+          transform: translateX(20px) scale(1.1);
+        }
+        90% {
+          opacity: 0.3;
+        }
+        100% {
+          bottom: 110vh;
+          opacity: 0;
+          transform: translateX(-10px) scale(0.8);
+        }
+      }
+
+      /* SCREENS */
+      .screen {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+      .screen.active {
+        display: flex;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-in {
+        animation: fadeUp 0.6s ease both;
+      }
+
+      /* CARD */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        padding: 2rem;
+      }
+
+      /* TYPOGRAPHY */
+      .title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.6rem;
+        background: linear-gradient(135deg, var(--rose), var(--gold));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .subtitle {
+        color: var(--muted);
+        text-align: center;
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+        font-weight: 300;
+      }
+      .divider {
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--rose), transparent);
+        margin: 0.75rem auto;
+      }
+
+      /* BUTTONS */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.7rem 1.8rem;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        font-family: 'Lato', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        transition: all 0.3s ease;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--deep), var(--rose));
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(196, 30, 90, 0.4);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(196, 30, 90, 0.6);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+      .btn-secondary:hover {
+        color: var(--text);
+        border-color: var(--rose);
+      }
+      .btn-gold {
+        background: linear-gradient(135deg, #c89020, var(--gold));
+        color: #1a0028;
+        font-weight: 700;
+      }
+      .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(240, 192, 96, 0.4);
+      }
+      .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      /* BACK */
+      .back-btn {
+        position: fixed;
+        top: 1.2rem;
+        left: 1.2rem;
+        background: rgba(26, 0, 40, 0.8);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 0.45rem 1.1rem;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: 'Lato', sans-serif;
+        font-size: 0.82rem;
+        z-index: 100;
+        transition: all 0.3s;
+        backdrop-filter: blur(8px);
+      }
+      .back-btn:hover {
+        color: var(--text);
+        border-color: var(--rose);
+      }
+
+      /* ── PASSWORD ── */
+      #password-screen .lock {
+        font-size: 3.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+        animation: pulse 2.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+      #password-screen .card {
+        width: 100%;
+        max-width: 420px;
+        text-align: center;
+      }
+      #password-screen h1 {
+        font-size: 2rem;
+        color: var(--rose);
+        margin-bottom: 0.3rem;
+      }
+      .hint-box {
+        background: rgba(232, 132, 154, 0.08);
+        border: 1px solid rgba(232, 132, 154, 0.22);
+        border-radius: 12px;
+        padding: 0.7rem 1rem;
+        margin: 0.8rem 0;
+        font-size: 0.88rem;
+        color: var(--muted);
+        font-style: italic;
+      }
+      .hint-box strong {
+        color: var(--blush);
+        font-style: normal;
+      }
+      #pw-input {
+        width: 100%;
+        padding: 0.8rem 1.2rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+        font-family: 'Lato', sans-serif;
+        font-size: 1rem;
+        text-align: center;
+        letter-spacing: 0.12em;
+        outline: none;
+        margin: 0.8rem 0;
+        transition: border-color 0.3s;
+      }
+      #pw-input:focus {
+        border-color: var(--rose);
+      }
+      #pw-input.shake {
+        animation: shake 0.4s ease;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-8px);
+        }
+        75% {
+          transform: translateX(8px);
+        }
+      }
+      #pw-err {
+        color: #e05050;
+        font-size: 0.82rem;
+        min-height: 1.1rem;
+        margin-bottom: 0.4rem;
+      }
+
+      /* ── INTRO ── */
+      #intro-screen .card {
+        max-width: 560px;
+        text-align: center;
+      }
+      #intro-screen p {
+        color: var(--text);
+        line-height: 1.8;
+        margin: 0.9rem 0;
+        font-size: 0.98rem;
+      }
+
+      /* ── SILHOUETTE (shared) ── */
+      .wina-figure {
+        display: block;
+      }
+      .wina-figure .region {
+        transition:
+          fill 0.6s ease,
+          opacity 0.6s ease,
+          filter 0.6s ease,
+          stroke 0.6s ease;
+      }
+      .wina-figure .region.outline {
+        fill: none;
+        stroke: rgba(255, 240, 243, 0.28);
+        stroke-width: 2;
+        stroke-dasharray: 5 4;
+      }
+      .wina-figure .region.filled {
+        stroke: none;
+        fill: url(#gradPink);
+        filter: drop-shadow(0 0 8px rgba(232, 132, 154, 0.65));
+      }
+      .wina-figure [data-region='hair'].filled {
+        fill: url(#gradHair);
+        filter: drop-shadow(0 0 6px rgba(20, 10, 5, 0.5));
+      }
+      .wina-figure [data-region='face'].filled {
+        fill: url(#gradSkin);
+        filter: drop-shadow(0 0 6px rgba(139, 90, 52, 0.45));
+      }
+      .wina-figure [data-region='shoulders'].filled {
+        fill: url(#gradSkin);
+        filter: drop-shadow(0 0 6px rgba(139, 90, 52, 0.45));
+      }
+      .wina-figure [data-region='arms'].filled {
+        fill: url(#gradSkin);
+        filter: drop-shadow(0 0 6px rgba(139, 90, 52, 0.45));
+      }
+      .wina-figure [data-region='torso'].filled {
+        fill: url(#gradDress);
+        filter: drop-shadow(0 0 8px rgba(196, 30, 90, 0.5));
+      }
+      .wina-figure .region.filled.dull {
+        fill: #5a4a55;
+        filter: none;
+      }
+      .wina-figure .detail {
+        opacity: 0;
+        transition: opacity 0.6s ease;
+      }
+      .wina-figure .detail.filled {
+        opacity: 1;
+      }
+      .wina-figure .aura-region {
+        fill: none;
+        stroke: none;
+      }
+      .wina-figure .aura-region.filled {
+        fill: url(#gradAura);
+        opacity: 0.55;
+        filter: blur(2px);
+      }
+
+      /* ── MAZE HUD ── */
+      #maze-screen {
+        gap: 1rem;
+        padding-top: 4.5rem;
+      }
+      .hud {
+        display: flex;
+        align-items: center;
+        gap: 1.1rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 0.6rem 1.1rem;
+        backdrop-filter: blur(10px);
+      }
+      .hud-sil {
+        width: 46px;
+        height: 58px;
+        flex-shrink: 0;
+      }
+      .hud-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+      .hud-count {
+        font-family: 'Playfair Display', serif;
+        color: var(--rose);
+        font-size: 1rem;
+      }
+      .hud-hint {
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .maze-wrap {
+        overflow: auto;
+        max-width: 96vw;
+        padding: 0.4rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      #maze-grid {
+        position: relative;
+        border-top: 3px solid var(--wall);
+        border-left: 3px solid var(--wall);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .m-cell {
+        position: absolute;
+        box-sizing: border-box;
+        border-color: var(--wall);
+        border-style: solid;
+        border-width: 0;
+      }
+      .m-player {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        transition:
+          left 0.12s linear,
+          top 0.12s linear;
+        filter: drop-shadow(0 0 6px rgba(232, 132, 154, 0.8));
+        z-index: 5;
+      }
+      .m-piece {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        animation: bob 1.8s ease-in-out infinite;
+        z-index: 4;
+        cursor: pointer;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+      .dpad {
+        display: grid;
+        grid-template-columns: repeat(3, 52px);
+        grid-template-rows: repeat(3, 52px);
+        gap: 4px;
+        margin-top: 0.4rem;
+      }
+      .dpad button {
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(255, 240, 243, 0.08);
+        color: var(--text);
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+      .dpad button:active {
+        background: rgba(232, 132, 154, 0.3);
+      }
+      .dpad .sp {
+        visibility: hidden;
+      }
+      .maze-actions {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      /* ── CHALLENGE / REVEAL OVERLAYS ── */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 0, 12, 0.86);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 1.2rem;
+      }
+      .overlay.active {
+        display: flex;
+      }
+      .overlay-card {
+        max-width: 520px;
+        width: 100%;
+        text-align: center;
+        max-height: 88vh;
+        overflow-y: auto;
+      }
+      .overlay-card h2 {
+        color: var(--rose);
+        font-size: 1.5rem;
+        margin-bottom: 0.2rem;
+      }
+      .overlay-card .ov-sub {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 1.1rem;
+      }
+      .ov-body {
+        margin: 1rem 0;
+      }
+      .ov-actions {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-top: 1.2rem;
+        flex-wrap: wrap;
+      }
+
+      /* reveal card */
+      .reveal-trait {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        color: var(--gold);
+        margin-bottom: 0.3rem;
+      }
+      .reveal-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 1rem;
+        margin-bottom: 0.3rem;
+      }
+      .reveal-text {
+        font-size: 0.92rem;
+        line-height: 1.7;
+        color: var(--text);
+      }
+
+      /* connect the dots */
+      .chal-progress {
+        font-size: 0.85rem;
+        color: var(--blush);
+        margin-top: 0.6rem;
+      }
+      .cn-dot circle {
+        fill: rgba(255, 240, 243, 0.12);
+        stroke: var(--border);
+        stroke-width: 2;
+        transition:
+          fill 0.15s,
+          stroke 0.15s;
+      }
+      .cn-dot text {
+        fill: var(--text);
+        font-family: 'Lato', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        pointer-events: none;
+        user-select: none;
+      }
+      .cn-dot.cn-hit circle {
+        fill: var(--rose);
+        stroke: var(--rose);
+      }
+      .cn-dot.cn-wrong circle {
+        fill: #e05050;
+        stroke: #e05050;
+      }
+
+      /* simon */
+      .simon-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 84px);
+        grid-template-rows: repeat(2, 84px);
+        gap: 8px;
+        justify-content: center;
+        margin: 0 auto;
+      }
+      .simon-pad {
+        border-radius: 14px;
+        border: 2px solid var(--border);
+        cursor: pointer;
+        opacity: 0.55;
+        transition:
+          opacity 0.15s,
+          transform 0.1s;
+      }
+      .simon-pad.lit {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      .simon-pad.p0 {
+        background: #c41e5a;
+      }
+      .simon-pad.p1 {
+        background: #f0c060;
+      }
+      .simon-pad.p2 {
+        background: #5cb85c;
+      }
+      .simon-pad.p3 {
+        background: #8858d0;
+      }
+
+      /* unscramble */
+      .scramble-letters {
+        display: flex;
+        gap: 0.4rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      .scr-letter {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: rgba(255, 240, 243, 0.1);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: 'Playfair Display', serif;
+        font-size: 1.15rem;
+        cursor: pointer;
+      }
+      .scr-letter:disabled {
+        opacity: 0.25;
+        cursor: default;
+      }
+      .scramble-answer {
+        display: flex;
+        gap: 0.35rem;
+        justify-content: center;
+        min-height: 46px;
+      }
+      .scr-slot {
+        width: 38px;
+        height: 42px;
+        border-bottom: 2px solid var(--rose);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem;
+      }
+
+      /* whack */
+      .whack-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 72px);
+        grid-template-rows: repeat(3, 72px);
+        gap: 8px;
+        justify-content: center;
+        margin: 0 auto;
+      }
+      .whack-hole {
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        cursor: pointer;
+        overflow: hidden;
+      }
+      .whack-hole span {
+        transform: scale(0);
+        transition: transform 0.12s;
+      }
+      .whack-hole.up span {
+        transform: scale(1);
+      }
+
+      /* odd one out */
+      .oo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 60px);
+        gap: 8px;
+        justify-content: center;
+        margin: 0 auto;
+      }
+      .oo-cell {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .oo-cell:hover {
+        border-color: var(--rose);
+      }
+      .oo-cell.oo-shake {
+        animation: shake 0.3s ease;
+      }
+
+      /* typing */
+      #type-target {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        color: var(--blush);
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.6;
+      }
+      #type-input {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+        font-size: 1rem;
+        outline: none;
+      }
+      #type-input.ok {
+        border-color: var(--green);
+      }
+
+      /* trivia */
+      .trivia-q {
+        font-size: 1.02rem;
+        margin-bottom: 1rem;
+        color: var(--text);
+      }
+      .trivia-choices {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .trivia-choice {
+        padding: 0.65rem 1rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(255, 240, 243, 0.05);
+        color: var(--text);
+        cursor: pointer;
+        text-align: left;
+        font-family: 'Lato', sans-serif;
+        font-size: 0.9rem;
+      }
+      .trivia-choice:hover {
+        border-color: var(--rose);
+      }
+      .trivia-choice.wrong {
+        border-color: #e05050;
+        color: #e05050;
+      }
+      .trivia-choice.right {
+        border-color: var(--green);
+        color: var(--green);
+      }
+
+      /* slider */
+      .slider-wrap {
+        width: 222px;
+        height: 150px;
+        position: relative;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      .sl-tile {
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--deep), var(--rose));
+        color: #fff;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          left 0.15s,
+          top 0.15s;
+      }
+
+      /* ── FINAL ── */
+      #final-screen {
+        background: radial-gradient(ellipse at center, #3d0032 0%, #0d0018 65%);
+      }
+      .final-sil {
+        width: 170px;
+        height: 220px;
+        margin: 0 auto 1rem;
+      }
+      .final-card {
+        max-width: 680px;
+        width: 100%;
+        animation: fadeUp 1.2s ease both;
+      }
+      .final-card h2 {
+        font-size: 1.9rem;
+        color: var(--rose);
+        margin-bottom: 0.4rem;
+        text-align: center;
+      }
+      .trait-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 1rem;
+        margin: 1.6rem 0;
+      }
+      .trait-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.1rem;
+        text-align: left;
+      }
+      .trait-card h4 {
+        color: var(--gold);
+        font-family: 'Playfair Display', serif;
+        font-size: 1.05rem;
+        margin-bottom: 0.4rem;
+      }
+      .trait-card p {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .final-letter p {
+        line-height: 1.9;
+        font-size: 0.98rem;
+        color: var(--text);
+        margin-bottom: 1.1rem;
+      }
+      .final-footer {
+        text-align: center;
+        margin-top: 1.6rem;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        color: var(--gold);
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts-bg" id="hearts-bg"></div>
+
+    <!-- shared SVG gradients, hidden -->
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <linearGradient id="gradPink" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#E8849A" />
+          <stop offset="100%" stop-color="#F0C060" />
+        </linearGradient>
+        <radialGradient id="gradAura" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F0C060" stop-opacity=".9" />
+          <stop offset="100%" stop-color="#E8849A" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+    </svg>
+
+    <!-- ══ SCREEN 1 · PASSWORD ══ -->
+    <div id="password-screen" class="screen active fade-in">
+      <div class="lock">🔒</div>
+      <div class="card">
+        <h1 style="font-size: 2rem; color: var(--rose); text-align: center; margin-bottom: 0.2rem">
+          Piece by Piece
+        </h1>
+        <div class="divider"></div>
+        <p class="subtitle" style="margin-bottom: 0.5rem">
+          This page is locked. Enter the password to continue.
+        </p>
+        <div class="hint-box"><strong>Hint:</strong> Where I asked you to be my girlfriend</div>
+        <input
+          id="pw-input"
+          type="text"
+          placeholder="enter password…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <p id="pw-err"></p>
+        <button class="btn btn-primary" style="width: 100%" onclick="checkPw()">Open ♥</button>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 2 · INTRO ══ -->
+    <div id="intro-screen" class="screen">
+      <div class="card">
+        <h1 class="title" style="font-size: 2.1rem">Find Me In The Maze</h1>
+        <div class="divider"></div>
+        <p>Somewhere in here are eight pieces of you.</p>
+        <p>
+          Each one is a piece of who you are. To reach it, you'll have to get through a little
+          challenge first. Once you do, that piece locks into place.
+        </p>
+        <p>Collect all eight, and you'll see the whole picture.</p>
+        <button class="btn btn-primary" onclick="goTo('maze-screen')" style="margin-top: 0.8rem">
+          Enter the Maze ♥
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 3 · MAZE ══ -->
+    <div id="maze-screen" class="screen">
+      <div class="hud">
+        <svg class="wina-figure hud-sil" viewBox="0 0 240 300"></svg>
+        <div class="hud-text">
+          <div class="hud-count"><span id="hud-found">0</span> / 8 pieces found</div>
+          <div class="hud-hint">Arrow keys / WASD to move</div>
+        </div>
+      </div>
+      <div class="maze-wrap">
+        <div id="maze-grid"></div>
+      </div>
+      <div class="dpad" id="dpad">
+        <div class="sp"></div>
+        <button data-dir="N">▲</button>
+        <div class="sp"></div>
+        <button data-dir="W">◀</button>
+        <div class="sp"></div>
+        <button data-dir="E">▶</button>
+        <div class="sp"></div>
+        <button data-dir="S">▼</button>
+        <div class="sp"></div>
+      </div>
+      <div class="maze-actions">
+        <button class="btn btn-secondary" onclick="regenerateMaze()">New Maze Layout</button>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 4 · FINAL ══ -->
+    <div id="final-screen" class="screen">
+      <div class="card final-card">
+        <svg class="wina-figure final-sil" viewBox="0 0 240 300"></svg>
+        <h2>This Is You, Wina ♥</h2>
+        <div class="divider"></div>
+        <div class="trait-gallery" id="trait-gallery"></div>
+        <div class="final-letter" id="final-letter"></div>
+        <div class="final-footer">— Gabe</div>
+      </div>
+    </div>
+
+    <!-- ══ CHALLENGE OVERLAY ══ -->
+    <div class="overlay" id="challenge-overlay">
+      <div class="card overlay-card">
+        <h2 id="chal-title"></h2>
+        <p class="ov-sub" id="chal-sub"></p>
+        <div class="ov-body" id="chal-body"></div>
+        <div class="ov-actions">
+          <button class="btn btn-secondary" onclick="skipChallenge()">Skip this one</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REVEAL OVERLAY ══ -->
+    <div class="overlay" id="reveal-overlay">
+      <div class="card overlay-card">
+        <div class="reveal-label" id="reveal-piecenum"></div>
+        <div class="reveal-trait" id="reveal-trait"></div>
+        <div class="reveal-label">What it looks like</div>
+        <p class="reveal-text" id="reveal-desc"></p>
+        <div class="reveal-label">A moment I saw it</div>
+        <p class="reveal-text" id="reveal-memory"></p>
+        <div class="reveal-label">Why I love it</div>
+        <p class="reveal-text" id="reveal-why"></p>
+        <div class="ov-actions">
+          <button class="btn btn-primary" id="reveal-continue" onclick="closeReveal()">
+            Keep Going ♥
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ═══════════════════════════════════════════════════════════════
+   PIECE CONTENT — FILL THIS IN
+   ───────────────────────────────────────────────────────────────
+   For each of the 8 pieces below, replace the PLACEHOLDER text
+   with the real thing:
+     trait        - the name of the trait (e.g. "Her laugh")
+     description  - a sentence or two on how it shows up in her
+     memory       - a specific moment you saw it firsthand
+     whyLove      - why that moment/trait gets you, specifically
+
+   A few pieces have one extra field tied to their mini-game —
+   also placeholders, also yours to edit:
+     piece 3 (unscramble) -> unscrambleWord
+     piece 6 (typing)     -> typingPhrase
+     piece 7 (trivia)     -> trivia {question, choices[], answer}
+       (trivia is pre-filled with a real detail from your
+       i-love-wina.html crossword — swap it for anything you like)
+
+   Do not rename "region" or "challenge" — those wire up the
+   silhouette artwork and the mini-game engine.
+   ═══════════════════════════════════════════════════════════════ */
+      const PIECES = [
+        {
+          id: 1,
+          region: 'hair',
+          challenge: 'connect',
+          trait: 'Kindness',
+          description:
+            'It is clear that you care about people -- you look out for others in their time of need and show up for all in need.',
+          memory:
+            'We were sitting in bed just watching reels with you. An ad came up for asking for support for Sudanese families and you did not hesitate for a second to donate the second you saw that.',
+          whyLove:
+            'You are such a good person in all manners. You make me want to be a better person.',
+        },
+
+        {
+          id: 2,
+          region: 'face',
+          challenge: 'simon',
+          trait: 'Intelligence',
+          description:
+            'Whether it is being knowledge in just about every subject or being extremely emotionally intelligent, I admire your understanding of the world.',
+          memory:
+            'The way you are always so incredible at those "Guess the Country" videos is astounding to me.',
+          whyLove:
+            'Your intelligence is so attractive. I feel like I am always learning around you and can talk to you about anything.',
+        },
+
+        {
+          id: 3,
+          region: 'eyes',
+          challenge: 'unscramble',
+          unscrambleWord: 'GORGEOUS',
+          trait: 'Beauty',
+          description:
+            'Every. Single. Thing. Every component of you internally and externally is perfection. I love looking at you.',
+          memory:
+            'I specifically remember seeing you pull up to bowling after spending the day with my parents and just being in awe of you. You had me just staring the whole night',
+          whyLove:
+            'I could spend my life just staring at you and be happy. Looking at you just brings me instant joy',
+        },
+
+        {
+          id: 4,
+          region: 'heart',
+          challenge: 'whack',
+          trait: 'Strength',
+          description:
+            'No matter the situation you go through, you always push through and none of your amazing traits falter. I know you would get through anything life could ever throw at you',
+          memory:
+            'This past fall with your anxiety at a peak related to your health, you still were always shining at work, being a light in every life you touched, and still pushing through every day.',
+          whyLove:
+            'You inspire me. I genuinely see you and want to be like you. When I have rough days, I think about you and that pushes me forward',
+        },
+
+        {
+          id: 5,
+          region: 'shoulders',
+          challenge: 'oddoneout',
+          trait: 'Humor',
+          description:
+            'You have mentioned it before -- I can never stop chuckling when I am around you.',
+          memory:
+            'I always struggle to stop you from biting me because I am holding my laugh at the same time.',
+          whyLove:
+            'No matter the state I am ever in, I know I can be around you, have a laugh, and raise my spirits',
+        },
+
+        {
+          id: 6,
+          region: 'torso',
+          challenge: 'typing',
+          typingPhrase: 'wina is my favorite person',
+          trait: 'Integrity',
+          description:
+            'If there is one thing about you, you are going to do the right thing and show care. Even when it is really difficult',
+          memory:
+            'You have had several frustrating moments with your sister. You have been put through a lot. Regardless of how it feels in the moment though, you always end up doing the right thing for your family',
+          whyLove:
+            'As with many of these traits, you make me want to be better. I want to surround myself with people like you and I want to be like you. I also feel safe around you -- as many people do.',
+        },
+
+        {
+          id: 7,
+          region: 'arms',
+          challenge: 'trivia',
+          trivia: {
+            question: 'Which of these is my favorite physical attribute of your?',
+            choices: ['Your Nose', 'Your Smile', 'Your Eyes', 'Your Hair'],
+            answer: 1,
+          },
+          trait: 'Passion',
+          description:
+            'You love. I love seeing you love. Seeing you enjoy people and have interests you pursue.',
+          memory:
+            'Too many memories of you explaining Eritrean songs to me. I love the look in your eye and the way you make sure I get every detail of the song.',
+          whyLove:
+            'Your care is attractive. When you are interested in something, I find myself increasing interest. You expand my world.',
+        },
+
+        {
+          id: 8,
+          region: 'aura',
+          challenge: 'slider',
+          trait: 'Taste',
+          description:
+            'It is as if (almost) every opinion you have is exactly something I agree with or enjoy. Your YouTube immaculate. The way you want to raise your kids -- very much like me. Our politics -- nearly identical',
+          memory:
+            'I remember you telling me that your kids would be doing something just like Kumon when they get of age and I IMMEDIATELY though "Wow. She gets me"',
+          whyLove:
+            'I feel like we get each other. Differences in opinions are only natural but our overlap gives us so much to align with, discuss, and enjoy together',
+        },
+      ];
+
+      /* Final closing message — placeholder, matches the tone of i-love-wina.html */
+      const FINAL_LETTER = `Hey Wina,
+
+When I see you, this is what I see.
+
+Everything about you is radiant and takes my breath away.
+
+I feel so lucky for having the opportunity to know you`;
+
+      /* ═══════════════════════════════════════════════════════════════
+   END OF EDITABLE CONTENT
+   ═══════════════════════════════════════════════════════════════ */
+
+      const PW = 'tre dita';
+
+      // ── FLOATING HEARTS ──
+      (() => {
+        const c = document.getElementById('hearts-bg');
+        const syms = ['♥', '♡', '❤', '💕', '✿', '❀', '✦'];
+        const cols = ['#E8849A', '#FFB6C1', '#F0C060', '#C41E5A', '#FFD4DC'];
+        for (let i = 0; i < 20; i++) {
+          const s = document.createElement('span');
+          s.className = 'hp';
+          s.textContent = syms[i % syms.length];
+          s.style.left = Math.random() * 100 + 'vw';
+          s.style.fontSize = 0.7 + Math.random() * 1.3 + 'rem';
+          s.style.color = cols[Math.floor(Math.random() * cols.length)];
+          s.style.animationDuration = 10 + Math.random() * 16 + 's';
+          s.style.animationDelay = Math.random() * 14 + 's';
+          c.appendChild(s);
+        }
+      })();
+
+      function goTo(id) {
+        document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
+        const next = document.getElementById(id);
+        next.classList.add('active', 'fade-in');
+        next.addEventListener('animationend', () => next.classList.remove('fade-in'), {
+          once: true,
+        });
+        window.scrollTo(0, 0);
+      }
+
+      // ── PASSWORD ──
+      function checkPw() {
+        const v = document.getElementById('pw-input').value.trim().toLowerCase();
+        const err = document.getElementById('pw-err');
+        if (v === PW) {
+          buildSilhouettes();
+          initMaze();
+          goTo('intro-screen');
+        } else {
+          err.textContent = "That's not it. Try again.";
+          const inp = document.getElementById('pw-input');
+          inp.classList.remove('shake');
+          void inp.offsetWidth;
+          inp.classList.add('shake');
+          inp.addEventListener('animationend', () => inp.classList.remove('shake'), {
+            once: true,
+          });
+        }
+      }
+      document.getElementById('pw-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkPw();
+        document.getElementById('pw-err').textContent = '';
+      });
+
+      // ════════════════════════════════════════════════
+      // SILHOUETTE ARTWORK (shared markup injected into both SVGs)
+      // ════════════════════════════════════════════════
+      const FIGURE_SVG = `
+  <ellipse class="region aura-region outline" data-region="aura" cx="120" cy="150" rx="132" ry="140"/>
+  <path class="region outline" data-region="hair" d="M65,145 C50,145 42,120 48,98 C35,90 38,62 60,52 C58,35 82,25 100,32 C108,18 132,18 140,32 C158,25 182,35 180,52 C202,62 205,90 192,98 C198,120 190,145 175,145 C180,120 172,100 158,92 C155,75 138,65 120,65 C102,65 85,75 82,92 C68,100 60,120 65,145 Z"/>
+  <circle class="region outline" data-region="face" cx="120" cy="108" r="40"/>
+  <g class="detail" data-region="eyes">
+    <circle cx="105" cy="105" r="3.4" fill="#1A0028"/>
+    <circle cx="135" cy="105" r="3.4" fill="#1A0028"/>
+    <path d="M105,122 Q120,132 135,122" stroke="#1A0028" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+  <path class="region outline" data-region="shoulders" d="M100,140 L100,155 L58,192 L182,192 L140,155 L140,140 Z"/>
+  <path class="region outline" data-region="torso" d="M58,192 L182,192 L204,292 L36,292 Z"/>
+  <path class="region outline" data-region="arms" d="M64,196 C36,222 40,254 92,248 L98,236 C64,238 58,222 78,204 Z M176,196 C204,222 200,254 148,248 L142,236 C176,238 182,222 162,204 Z"/>
+  <g class="detail" data-region="heart">
+    <path transform="translate(120,228) scale(1.7)" d="M0,-3 C-2,-6 -7,-6 -7,-2 C-7,2 -3,5 0,8 C3,5 7,2 7,-2 C7,-6 2,-6 0,-3 Z" fill="#E8849A"/>
+  </g>
+`;
+      function buildSilhouettes() {
+        document.querySelectorAll('svg.wina-figure').forEach((svg) => {
+          svg.innerHTML = FIGURE_SVG;
+        });
+        updateSilhouette();
+      }
+      function updateSilhouette() {
+        document.querySelectorAll('svg.wina-figure').forEach((svg) => {
+          PIECES.forEach((p) => {
+            const el = svg.querySelector(`[data-region="${p.region}"]`);
+            if (!el) return;
+            el.classList.toggle('outline', !p.collected);
+            el.classList.toggle('filled', !!p.collected);
+            el.classList.toggle('dull', !!p.collected && !!p.skipped);
+          });
+        });
+      }
+
+      // ════════════════════════════════════════════════
+      // MAZE GENERATION (recursive backtracker)
+      // ════════════════════════════════════════════════
+      const MW = 15,
+        MH = 11,
+        CELL = 32;
+      const DIRS = {
+        N: { dr: -1, dc: 0, opp: 'S' },
+        S: { dr: 1, dc: 0, opp: 'N' },
+        E: { dr: 0, dc: 1, opp: 'W' },
+        W: { dr: 0, dc: -1, opp: 'E' },
+      };
+      let cells, startPos, player;
+
+      function generateMaze() {
+        cells = Array.from({ length: MH }, () =>
+          Array.from({ length: MW }, () => ({
+            N: true,
+            S: true,
+            E: true,
+            W: true,
+            visited: false,
+          })),
+        );
+        const sr = Math.floor(MH / 2),
+          sc = Math.floor(MW / 2);
+        startPos = { r: sr, c: sc };
+        const stack = [[sr, sc]];
+        cells[sr][sc].visited = true;
+        while (stack.length) {
+          const [r, c] = stack[stack.length - 1];
+          const dirs = Object.keys(DIRS).sort(() => Math.random() - 0.5);
+          let carved = false;
+          for (const d of dirs) {
+            const { dr, dc, opp } = DIRS[d];
+            const nr = r + dr,
+              nc = c + dc;
+            if (nr < 0 || nr >= MH || nc < 0 || nc >= MW) continue;
+            if (cells[nr][nc].visited) continue;
+            cells[r][c][d] = false;
+            cells[nr][nc][opp] = false;
+            cells[nr][nc].visited = true;
+            stack.push([nr, nc]);
+            carved = true;
+            break;
+          }
+          if (!carved) stack.pop();
+        }
+      }
+
+      function degree(r, c) {
+        const cell = cells[r][c];
+        return ['N', 'S', 'E', 'W'].filter((d) => !cell[d]).length;
+      }
+
+      function bfsDist(sr, sc) {
+        const dist = Array.from({ length: MH }, () => Array(MW).fill(-1));
+        dist[sr][sc] = 0;
+        const q = [[sr, sc]];
+        while (q.length) {
+          const [r, c] = q.shift();
+          for (const d of Object.keys(DIRS)) {
+            if (cells[r][c][d]) continue;
+            const { dr, dc } = DIRS[d];
+            const nr = r + dr,
+              nc = c + dc;
+            if (nr < 0 || nr >= MH || nc < 0 || nc >= MW) continue;
+            if (dist[nr][nc] !== -1) continue;
+            dist[nr][nc] = dist[r][c] + 1;
+            q.push([nr, nc]);
+          }
+        }
+        return dist;
+      }
+
+      function pickPieceCells() {
+        const dist = bfsDist(startPos.r, startPos.c);
+        let deadEnds = [];
+        for (let r = 0; r < MH; r++)
+          for (let c = 0; c < MW; c++) {
+            if (r === startPos.r && c === startPos.c) continue;
+            if (degree(r, c) === 1) deadEnds.push({ r, c, dist: dist[r][c] });
+          }
+        deadEnds.sort((a, b) => b.dist - a.dist);
+        let spacing = 4,
+          chosen = [];
+        while (chosen.length < 8 && spacing >= 0) {
+          chosen = [];
+          for (const cand of deadEnds) {
+            if (chosen.every((p) => Math.abs(p.r - cand.r) + Math.abs(p.c - cand.c) >= spacing)) {
+              chosen.push(cand);
+              if (chosen.length === 8) break;
+            }
+          }
+          spacing--;
+        }
+        // fall back: fill remaining slots from any leftover dead ends if maze is too small
+        if (chosen.length < 8) {
+          for (const cand of deadEnds) {
+            if (chosen.length >= 8) break;
+            if (!chosen.includes(cand)) chosen.push(cand);
+          }
+        }
+        return chosen.slice(0, 8);
+      }
+
+      function initMaze() {
+        PIECES.forEach((p) => {
+          p.collected = false;
+          p.skipped = false;
+        });
+        generateMaze();
+        const spots = pickPieceCells();
+        spots.forEach((spot, i) => {
+          PIECES[i].r = spot.r;
+          PIECES[i].c = spot.c;
+        });
+        player = { r: startPos.r, c: startPos.c };
+        renderMaze();
+        updateSilhouette();
+        updateHud();
+      }
+
+      function regenerateMaze() {
+        initMaze();
+      }
+
+      function renderMaze() {
+        const grid = document.getElementById('maze-grid');
+        grid.innerHTML = '';
+        grid.style.width = MW * CELL + 'px';
+        grid.style.height = MH * CELL + 'px';
+        for (let r = 0; r < MH; r++)
+          for (let c = 0; c < MW; c++) {
+            const cell = cells[r][c];
+            const d = document.createElement('div');
+            d.className = 'm-cell';
+            d.style.left = c * CELL + 'px';
+            d.style.top = r * CELL + 'px';
+            d.style.width = CELL + 'px';
+            d.style.height = CELL + 'px';
+            if (cell.E) d.style.borderRightWidth = '3px';
+            if (cell.S) d.style.borderBottomWidth = '3px';
+            grid.appendChild(d);
+          }
+        PIECES.forEach((p) => {
+          if (p.collected) return;
+          const el = document.createElement('div');
+          el.className = 'm-piece';
+          el.id = 'mpiece-' + p.id;
+          el.textContent = '🧩';
+          el.style.left = p.c * CELL + CELL / 2 - 11 + 'px';
+          el.style.top = p.r * CELL + CELL / 2 - 11 + 'px';
+          el.style.width = '22px';
+          el.style.height = '22px';
+          grid.appendChild(el);
+        });
+        const pl = document.createElement('div');
+        pl.className = 'm-player';
+        pl.id = 'm-player';
+        pl.textContent = '💗';
+        pl.style.left = player.c * CELL + CELL / 2 - 11 + 'px';
+        pl.style.top = player.r * CELL + CELL / 2 - 11 + 'px';
+        pl.style.width = '22px';
+        pl.style.height = '22px';
+        grid.appendChild(pl);
+      }
+
+      function movePlayer(dir) {
+        if (document.getElementById('challenge-overlay').classList.contains('active')) return;
+        if (document.getElementById('reveal-overlay').classList.contains('active')) return;
+        if (!document.getElementById('maze-screen').classList.contains('active')) return;
+        const cell = cells[player.r][player.c];
+        if (cell[dir]) return;
+        const { dr, dc } = DIRS[dir];
+        player.r += dr;
+        player.c += dc;
+        const pl = document.getElementById('m-player');
+        pl.style.left = player.c * CELL + CELL / 2 - 11 + 'px';
+        pl.style.top = player.r * CELL + CELL / 2 - 11 + 'px';
+        const found = PIECES.find((p) => !p.collected && p.r === player.r && p.c === player.c);
+        if (found) setTimeout(() => openChallenge(found), 150);
+      }
+
+      document.addEventListener('keydown', (e) => {
+        const map = {
+          ArrowUp: 'N',
+          ArrowDown: 'S',
+          ArrowLeft: 'W',
+          ArrowRight: 'E',
+          w: 'N',
+          s: 'S',
+          a: 'W',
+          d: 'E',
+          W: 'N',
+          S: 'S',
+          A: 'W',
+          D: 'E',
+        };
+        if (map[e.key]) {
+          e.preventDefault();
+          movePlayer(map[e.key]);
+        }
+      });
+      document.getElementById('dpad').addEventListener('click', (e) => {
+        const dir = e.target.getAttribute('data-dir');
+        if (dir) movePlayer(dir);
+      });
+
+      function updateHud() {
+        document.getElementById('hud-found').textContent = PIECES.filter(
+          (p) => p.collected,
+        ).length;
+      }
+
+      // ════════════════════════════════════════════════
+      // CHALLENGE ENGINE
+      // ════════════════════════════════════════════════
+      let activePiece = null;
+      let chalTimers = [];
+      function chalTimeout(fn, ms) {
+        const id = setTimeout(fn, ms);
+        chalTimers.push(id);
+        return id;
+      }
+      function chalInterval(fn, ms) {
+        const id = setInterval(fn, ms);
+        chalTimers.push(id);
+        return id;
+      }
+      function clearChalTimers() {
+        chalTimers.forEach((id) => {
+          clearTimeout(id);
+          clearInterval(id);
+        });
+        chalTimers = [];
+      }
+
+      const CHALLENGE_TITLES = {
+        connect: 'Trace the Heart',
+        simon: 'Follow the Pattern',
+        unscramble: 'Unscramble It',
+        whack: 'Catch Them All',
+        oddoneout: 'Spot the Different One',
+        typing: 'Type It Out',
+        trivia: 'Do You Remember?',
+        slider: 'Put It Back Together',
+      };
+      const CHALLENGE_SUBS = {
+        connect: 'Tap the numbered dots in order, 1 through 8.',
+        simon: 'Watch the sequence, then repeat it.',
+        unscramble: 'Tap the letters in the right order.',
+        whack: 'Click 10 hearts as they pop up.',
+        oddoneout: 'Find the one that doesn’t match — 3 rounds.',
+        typing: 'Type the phrase exactly, then hit Enter.',
+        trivia: 'One question about us.',
+        slider: 'Slide the tiles into order, 1 through 5.',
+      };
+
+      function openChallenge(piece) {
+        clearChalTimers();
+        activePiece = piece;
+        document.getElementById('chal-title').textContent = CHALLENGE_TITLES[piece.challenge];
+        document.getElementById('chal-sub').textContent = CHALLENGE_SUBS[piece.challenge];
+        const body = document.getElementById('chal-body');
+        body.innerHTML = '';
+        document.getElementById('challenge-overlay').classList.add('active');
+        const setup = {
+          connect: setupConnect,
+          simon: setupSimon,
+          unscramble: setupUnscramble,
+          whack: setupWhack,
+          oddoneout: setupOddOneOut,
+          typing: setupTyping,
+          trivia: setupTrivia,
+          slider: setupSlider,
+        };
+        setup[piece.challenge](body);
+      }
+
+      function challengeSolved() {
+        clearChalTimers();
+        document.getElementById('challenge-overlay').classList.remove('active');
+        activePiece.collected = true;
+        activePiece.skipped = false;
+        finishPiece();
+      }
+      function skipChallenge() {
+        clearChalTimers();
+        document.getElementById('challenge-overlay').classList.remove('active');
+        activePiece.collected = true;
+        activePiece.skipped = true;
+        finishPiece();
+      }
+      function finishPiece() {
+        const el = document.getElementById('mpiece-' + activePiece.id);
+        if (el) el.remove();
+        updateSilhouette();
+        updateHud();
+        showReveal(activePiece);
+      }
+
+      function showReveal(piece) {
+        document.getElementById('reveal-piecenum').textContent = `Piece ${piece.id} of 8`;
+        document.getElementById('reveal-trait').textContent = piece.trait;
+        document.getElementById('reveal-desc').textContent = piece.description;
+        document.getElementById('reveal-memory').textContent = piece.memory;
+        document.getElementById('reveal-why').textContent = piece.whyLove;
+        const allDone = PIECES.every((p) => p.collected);
+        document.getElementById('reveal-continue').textContent = allDone
+          ? 'See the Full Picture ♥'
+          : 'Keep Going ♥';
+        document.getElementById('reveal-overlay').classList.add('active');
+      }
+      function closeReveal() {
+        document.getElementById('reveal-overlay').classList.remove('active');
+        if (PIECES.every((p) => p.collected)) {
+          showFinal();
+        }
+      }
+
+      function showFinal() {
+        const gallery = document.getElementById('trait-gallery');
+        gallery.innerHTML = '';
+        PIECES.forEach((p) => {
+          const c = document.createElement('div');
+          c.className = 'trait-card';
+          c.innerHTML = `<h4>${p.trait}</h4><p>${p.description}</p>`;
+          gallery.appendChild(c);
+        });
+        const el = document.getElementById('final-letter');
+        el.innerHTML = '';
+        FINAL_LETTER.split('\n\n').forEach((para) => {
+          const pp = document.createElement('p');
+          pp.textContent = para;
+          el.appendChild(pp);
+        });
+        goTo('final-screen');
+      }
+
+      // ── CONNECT THE DOTS ──
+      function setupConnect(body) {
+        const pts = [
+          { x: 130, y: 55 },
+          { x: 92, y: 28 },
+          { x: 52, y: 55 },
+          { x: 46, y: 102 },
+          { x: 130, y: 192 },
+          { x: 214, y: 102 },
+          { x: 208, y: 55 },
+          { x: 168, y: 28 },
+        ];
+        body.innerHTML = `
+          <svg id="cn-svg" viewBox="0 0 260 220" style="width:100%;max-width:280px;display:block;margin:0 auto">
+            <polyline id="cn-line" points="" fill="none" stroke="#E8849A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="chal-progress" id="cn-prog">Tap 1 to begin</div>`;
+        const svg = document.getElementById('cn-svg');
+        const line = document.getElementById('cn-line');
+        const prog = document.getElementById('cn-prog');
+        const drawn = [];
+        let next = 0;
+        pts.forEach((p, i) => {
+          const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          g.setAttribute('class', 'cn-dot');
+          g.style.cursor = 'pointer';
+          const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', p.x);
+          c.setAttribute('cy', p.y);
+          c.setAttribute('r', 13);
+          const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          t.setAttribute('x', p.x);
+          t.setAttribute('y', p.y + 4);
+          t.setAttribute('text-anchor', 'middle');
+          t.textContent = i + 1;
+          g.appendChild(c);
+          g.appendChild(t);
+          g.addEventListener('click', () => {
+            if (i !== next) {
+              g.classList.add('cn-wrong');
+              chalTimeout(() => g.classList.remove('cn-wrong'), 300);
+              return;
+            }
+            g.classList.add('cn-hit');
+            drawn.push(`${p.x},${p.y}`);
+            line.setAttribute('points', drawn.join(' '));
+            next++;
+            if (next < pts.length) {
+              prog.textContent = `Tap ${next + 1} next`;
+            } else {
+              prog.textContent = 'A heart, of course.';
+              chalTimeout(challengeSolved, 700);
+            }
+          });
+          svg.appendChild(g);
+        });
+      }
+
+      // ── SIMON ──
+      function setupSimon(body) {
+        body.innerHTML = `<div class="simon-grid" id="simon-grid">
+    ${[0, 1, 2, 3].map((i) => `<div class="simon-pad p${i}" data-i="${i}"></div>`).join('')}
+  </div><div class="chal-progress" id="simon-prog">Watch closely…</div>`;
+        const pads = [...document.querySelectorAll('.simon-pad')];
+        let seq = [],
+          input = [],
+          round = 0,
+          locked = true;
+        function nextRound() {
+          round++;
+          seq.push(Math.floor(Math.random() * 4));
+          input = [];
+          document.getElementById('simon-prog').textContent = 'Watch closely…';
+          locked = true;
+          let i = 0;
+          const iv = chalInterval(() => {
+            pads.forEach((p) => p.classList.remove('lit'));
+            if (i < seq.length) {
+              pads[seq[i]].classList.add('lit');
+              chalTimeout(() => pads[seq[i]].classList.remove('lit'), 300);
+              i++;
+            } else {
+              clearInterval(iv);
+              locked = false;
+              document.getElementById('simon-prog').textContent =
+                `Your turn (${seq.length} to repeat)`;
+            }
+          }, 550);
+        }
+        pads.forEach((p) =>
+          p.addEventListener('click', () => {
+            if (locked) return;
+            const i = +p.dataset.i;
+            p.classList.add('lit');
+            chalTimeout(() => p.classList.remove('lit'), 200);
+            input.push(i);
+            const idx = input.length - 1;
+            if (input[idx] !== seq[idx]) {
+              input = [];
+              document.getElementById('simon-prog').textContent =
+                'Not quite — try the sequence again.';
+              chalTimeout(() => replay(), 700);
+              return;
+            }
+            if (input.length === seq.length) {
+              if (seq.length >= 5) {
+                challengeSolved();
+                return;
+              }
+              chalTimeout(nextRound, 600);
+            }
+          }),
+        );
+        function replay() {
+          locked = true;
+          document.getElementById('simon-prog').textContent = 'Watch closely…';
+          let i = 0;
+          const iv = chalInterval(() => {
+            pads.forEach((p) => p.classList.remove('lit'));
+            if (i < seq.length) {
+              pads[seq[i]].classList.add('lit');
+              chalTimeout(() => pads[seq[i]].classList.remove('lit'), 300);
+              i++;
+            } else {
+              clearInterval(iv);
+              locked = false;
+              document.getElementById('simon-prog').textContent =
+                `Your turn (${seq.length} to repeat)`;
+            }
+          }, 550);
+        }
+        nextRound();
+      }
+
+      // ── UNSCRAMBLE ──
+      function setupUnscramble(body) {
+        const word = (activePiece.unscrambleWord || 'LOVE').toUpperCase();
+        const letters = word
+          .split('')
+          .map((l, i) => ({ l, i }))
+          .sort(() => Math.random() - 0.5);
+        body.innerHTML = `
+    <div class="scramble-answer" id="scr-answer">${word
+      .split('')
+      .map(() => `<div class="scr-slot"></div>`)
+      .join('')}</div>
+    <div class="scramble-letters" id="scr-letters"></div>`;
+        const lettersEl = document.getElementById('scr-letters');
+        const slots = [...document.getElementById('scr-answer').children];
+        let answer = [];
+        letters.forEach(({ l, i }) => {
+          const b = document.createElement('button');
+          b.className = 'scr-letter';
+          b.textContent = l;
+          b.dataset.idx = i;
+          b.addEventListener('click', () => {
+            b.disabled = true;
+            answer.push({ l, btn: b });
+            slots[answer.length - 1].textContent = l;
+            if (answer.length === word.length) {
+              const guess = answer.map((a) => a.l).join('');
+              if (guess === word) {
+                chalTimeout(challengeSolved, 400);
+              } else {
+                chalTimeout(() => {
+                  answer.forEach((a) => {
+                    a.btn.disabled = false;
+                  });
+                  slots.forEach((s) => (s.textContent = ''));
+                  answer = [];
+                }, 700);
+              }
+            }
+          });
+          lettersEl.appendChild(b);
+        });
+      }
+
+      // ── WHACK ──
+      function setupWhack(body) {
+        body.innerHTML = `<div class="whack-grid" id="whack-grid">${Array.from({ length: 9 }, (_, i) => `<div class="whack-hole" data-i="${i}"><span>💗</span></div>`).join('')}</div><div class="chal-progress" id="whack-prog">Hit: 0 / 10</div>`;
+        const holes = [...document.querySelectorAll('.whack-hole')];
+        let hits = 0,
+          active = -1,
+          timer;
+        function pop() {
+          holes.forEach((h) => h.classList.remove('up'));
+          active = Math.floor(Math.random() * holes.length);
+          holes[active].classList.add('up');
+          clearTimeout(timer);
+          timer = chalTimeout(pop, 900);
+        }
+        holes.forEach((h, i) =>
+          h.addEventListener('click', () => {
+            if (!h.classList.contains('up')) return;
+            h.classList.remove('up');
+            hits++;
+            document.getElementById('whack-prog').textContent = `Hit: ${hits} / 10`;
+            if (hits >= 10) {
+              clearTimeout(timer);
+              challengeSolved();
+              return;
+            }
+            pop();
+          }),
+        );
+        pop();
+      }
+
+      // ── ODD ONE OUT ──
+      const ODD_ONE_OUT_ROUNDS = [
+        { base: '💗', odd: '💛', size: 9 },
+        { base: '✨', odd: '⭐', size: 12 },
+        { base: '🌸', odd: '🌷', size: 12 },
+      ];
+      function setupOddOneOut(body) {
+        body.innerHTML = `<div class="oo-grid" id="oo-grid"></div><div class="chal-progress" id="oo-prog"></div>`;
+        const grid = document.getElementById('oo-grid');
+        const prog = document.getElementById('oo-prog');
+        let round = 0;
+        function renderRound() {
+          const cfg = ODD_ONE_OUT_ROUNDS[round];
+          grid.innerHTML = '';
+          const oddIdx = Math.floor(Math.random() * cfg.size);
+          prog.textContent = `Round ${round + 1} of ${ODD_ONE_OUT_ROUNDS.length} — find the one that's different`;
+          for (let i = 0; i < cfg.size; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'oo-cell';
+            cell.textContent = i === oddIdx ? cfg.odd : cfg.base;
+            cell.addEventListener('click', () => {
+              if (i === oddIdx) {
+                round++;
+                if (round >= ODD_ONE_OUT_ROUNDS.length) {
+                  challengeSolved();
+                } else {
+                  renderRound();
+                }
+              } else {
+                cell.classList.add('oo-shake');
+                chalTimeout(() => cell.classList.remove('oo-shake'), 300);
+              }
+            });
+            grid.appendChild(cell);
+          }
+        }
+        renderRound();
+      }
+
+      // ── TYPING ──
+      function setupTyping(body) {
+        const phrase = (activePiece.typingPhrase || 'i love you').toLowerCase();
+        body.innerHTML = `<div id="type-target">"${phrase}"</div><input id="type-input" type="text" autocomplete="off" spellcheck="false" placeholder="type it here…" />`;
+        const input = document.getElementById('type-input');
+        input.addEventListener('input', () => {
+          const v = input.value.toLowerCase();
+          input.classList.toggle('ok', v === phrase);
+        });
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && input.value.toLowerCase() === phrase) {
+            challengeSolved();
+          }
+        });
+        input.focus();
+      }
+
+      // ── TRIVIA ──
+      function setupTrivia(body) {
+        const t = activePiece.trivia;
+        body.innerHTML = `<div class="trivia-q">${t.question}</div><div class="trivia-choices" id="trivia-choices"></div>`;
+        const wrap = document.getElementById('trivia-choices');
+        t.choices.forEach((choice, i) => {
+          const b = document.createElement('button');
+          b.className = 'trivia-choice';
+          b.textContent = choice;
+          b.addEventListener('click', () => {
+            if (i === t.answer) {
+              b.classList.add('right');
+              chalTimeout(challengeSolved, 500);
+            } else {
+              b.classList.add('wrong');
+              chalTimeout(() => b.classList.remove('wrong'), 600);
+            }
+          });
+          wrap.appendChild(b);
+        });
+      }
+
+      // ── SLIDER ──
+      function setupSlider(body) {
+        body.innerHTML = `<div class="slider-wrap" id="slider-wrap"></div>`;
+        const wrap = document.getElementById('slider-wrap');
+        const cols = 3,
+          rows = 2,
+          tileSize = 74;
+        // solved order: 1..5 then blank(6) at bottom-right
+        let tiles = [1, 2, 3, 4, 5, null];
+        function shuffle() {
+          // perform random valid moves from solved state to guarantee solvability
+          let blank = 5;
+          for (let i = 0; i < 120; i++) {
+            const neighbors = getNeighbors(blank, cols, rows);
+            const swapWith = neighbors[Math.floor(Math.random() * neighbors.length)];
+            [tiles[blank], tiles[swapWith]] = [tiles[swapWith], tiles[blank]];
+            blank = swapWith;
+          }
+        }
+        function getNeighbors(idx, cols, rows) {
+          const r = Math.floor(idx / cols),
+            c = idx % cols,
+            res = [];
+          if (r > 0) res.push(idx - cols);
+          if (r < rows - 1) res.push(idx + cols);
+          if (c > 0) res.push(idx - 1);
+          if (c < cols - 1) res.push(idx + 1);
+          return res;
+        }
+        shuffle();
+        function render() {
+          wrap.innerHTML = '';
+          tiles.forEach((val, idx) => {
+            if (val === null) return;
+            const r = Math.floor(idx / cols),
+              c = idx % cols;
+            const t = document.createElement('div');
+            t.className = 'sl-tile';
+            t.textContent = val;
+            t.style.left = c * tileSize + 2 + 'px';
+            t.style.top = r * tileSize + 2 + 'px';
+            t.addEventListener('click', () => {
+              const blank = tiles.indexOf(null);
+              if (getNeighbors(idx, cols, rows).includes(blank)) {
+                [tiles[idx], tiles[blank]] = [tiles[blank], tiles[idx]];
+                render();
+                if (tiles.slice(0, 5).every((v, i) => v === i + 1)) {
+                  chalTimeout(challengeSolved, 300);
+                }
+              }
+            });
+            wrap.appendChild(t);
+          });
+        }
+        render();
+      }
+    </script>
+  </body>
+</html>
